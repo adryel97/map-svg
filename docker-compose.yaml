@@ -1,0 +1,43 @@
+version: '3'
+networks:
+  map-latina: null
+services:
+  web-map-latina:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      ALLOW_OVERRIDE: 'true'
+      DEBUG: 'true'
+    container_name: web-map-latina
+    ports:
+      - '80:80'
+    networks:
+      - map-latina
+    depends_on:
+      - mysql-map-latina
+    volumes:
+      - './www:/var/www/html/'
+      - './php.ini:/usr/local/etc/php/php.ini'
+  mysql-map-latina:
+    image: mysql
+    command: '--default-authentication-plugin=mysql_native_password'
+    container_name: mysql-map-latina
+    tty: true
+    volumes:
+      - './dump:/docker-entrypoint-initdb.d'
+      - './data:/var/lib/mysql'
+    networks:
+      - map-latina
+    restart: unless-stopped
+    environment:
+      MYSQL_USER: homestead
+      MYSQL_DATABASE: homestead
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_HOST: localhost
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    ports:
+      - '3306:3306'
