@@ -3,16 +3,14 @@ document.addEventListener('DOMContentLoaded', function () {
 var data = {
     pais: ["BR", "AR", "JP"]
   };
-  const svg = document.querySelector('svg');
+const svg = document.querySelector('svg');
 
-// Suponha que você tenha um elemento SVG personalizado em um arquivo chamado 'icone.svg'
 // Carregue o ícone SVG
 fetch('point.svg')
   .then(response => response.text())
   .then(svgData => {
     // Itere sobre os IDs dos países no objeto de dados
     data.pais.forEach(function (countryId) {
-        //console.log(countryId);
       // Encontre o país pelo ID
       const countryPath = document.getElementById(countryId);
       if (!countryPath) {
@@ -23,7 +21,7 @@ fetch('point.svg')
       // Obtenha o bounding box do país
       const bbox = countryPath.getBBox();
 
-      // Calcule as coordenadas do ponto no centro do país
+      // Calcula as coordenadas do ponto no centro do país
       const centerX = bbox.x + bbox.width / 2;
       const centerY = bbox.y + bbox.height / 2;
 
@@ -47,28 +45,14 @@ fetch('point.svg')
 })
 
 function ScalePais(countryId, btn) {
-    btn.classList.add('active');
-
     const svgElement = document.querySelector(`svg [target="${countryId}"]`);
     const originalWidth = svgElement.getAttribute('width'); 
     const originalHeight = svgElement.getAttribute('height');
-
+    const buttons = document.querySelectorAll(".btn_pais");
     // Seu objeto de dados
     var data = {
         pais: ["BR", "AR", "JP"]
     };
-
-    var result = data.pais.filter((data) => {
-        return data != countryId
-    })
-    
-    result.forEach(idPais => {
-        const otherSvgElement = document.querySelector(`svg [target="${idPais}"]`);
-        if (otherSvgElement) {
-            otherSvgElement.setAttribute('width', originalWidth);
-            otherSvgElement.setAttribute('height', originalHeight);
-        }
-    });
 
     const ScaleUp = () => {
         const newWidth = originalWidth * 1.5; // Aumentar a largura em 50%
@@ -79,5 +63,37 @@ function ScalePais(countryId, btn) {
         svgElement.setAttribute('height', newHeight);
     }
 
-    ScaleUp();
+   
+
+    if (!btn.classList.contains("active")) {
+        // Remove a classe "active" de todos os botões com a classe "btn_pais"
+        buttons.forEach(function(botao) {
+            botao.classList.remove("active");
+        });
+        
+        // Adiciona a classe "active" apenas ao botão clicado
+        btn.classList.add("active");
+
+        // Chama sua função ScaleUp
+        ScaleUp();
+    } else {
+        return
+    }
+   
+    
+    //Faz um filtro trazendo outros pais fora o que foi clicado
+    var result = data.pais.filter((data) => {
+        return data != countryId
+    })
+
+    //Após o resultado, ele chama para o tamanho deles original
+    result.forEach(idPais => {
+        const otherSvgElement = document.querySelector(`svg [target="${idPais}"]`);
+        if (otherSvgElement) {
+            otherSvgElement.setAttribute('width', originalWidth);
+            otherSvgElement.setAttribute('height', originalHeight);
+        }
+    });
+
+   
 }

@@ -21,9 +21,9 @@
 </head>
 <body>
 <div>
-    <button onclick="ScalePais('BR', this)">Brazil</button>
-    <button onclick="ScalePais('AR', this)">Argentina</button>
-    <button onclick="ScalePais('JP', this)">Japão</button>
+    <button class="btn_pais" onclick="ScalePais('BR', this)">Brazil</button>
+    <button class="btn_pais" onclick="ScalePais('AR', this)">Argentina</button>
+    <button class="btn_pais" onclick="ScalePais('JP', this)">Japão</button>
 </div>
 <svg
    id="map"
